@@ -234,12 +234,14 @@ export default function OperatorPage() {
                     <span style={{marginLeft:'auto',fontSize:12,color:'var(--grey-label)'}}>{d.search_date}</span>
                   </div>
                   <div className={styles.slotBody}>
-                    <div style={{display:'flex',gap:16,fontSize:12}}>
-                      <span>🔍 {d.total_searches} search{d.total_searches !== 1 ? 'es' : ''}</span>
-                      {d.unmet_barge > 0 && <span style={{color:'var(--amber)',fontWeight:600}}>Barge: {d.unmet_barge} unmet</span>}
-                      {d.unmet_rail > 0  && <span style={{color:'var(--amber)',fontWeight:600}}>Rail: {d.unmet_rail} unmet</span>}
-                      {d.unmet_road > 0  && <span style={{color:'var(--amber)',fontWeight:600}}>Road: {d.unmet_road} unmet</span>}
-                      {(d.met_barge > 0 || d.met_rail > 0 || d.met_road > 0) && <span style={{color:'var(--green)',fontWeight:600}}>✓ {(d.met_barge||0)+(d.met_rail||0)+(d.met_road||0)} met</span>}
+                    <div style={{display:'flex',gap:12,fontSize:12,flexWrap:'wrap',alignItems:'center'}}>
+                      <span style={{color:'var(--grey-label)',fontWeight:600}}>{d.total_searches} search{d.total_searches !== 1 ? 'es' : ''}</span>
+                      {(() => {
+                        const unmet = Math.min(d.unmet_barge, d.unmet_rail, d.unmet_road);
+                        return unmet > 0
+                          ? <span style={{background:'#FFF3E0',color:'#E65100',padding:'2px 8px',borderRadius:4,fontWeight:600}}>{unmet} unmet</span>
+                          : <span style={{background:'#E8F5E9',color:'#2E7D32',padding:'2px 8px',borderRadius:4,fontWeight:600}}>All covered</span>;
+                      })()}
                     </div>
                   </div>
                 </div>
