@@ -156,9 +156,12 @@ function ResultsInner() {
 
   const loadSlots = useCallback(async () => {
     try {
+      // Use first word for DB query (matches 'Rotterdam', 'Antwerp' etc)
+      const originKey = origin.split(' ')[0];
+      const destKey   = dest.split(' ')[0];
       const raw = await getSlots({
-        origin:    origin.split(' ')[0],
-        destination: dest.split(' ')[0],
+        origin:      originKey,
+        destination: destKey,
         date,
         cargo_weight_kg: weightKg,
       });
@@ -167,8 +170,8 @@ function ResultsInner() {
 
       // Log the search with per-mode result counts
       logSearch({
-        origin:        origin.split(' ')[0],
-        destination:   dest.split(' ')[0],
+        origin:        originKey,
+        destination:   destKey,
         date,
         cargo_weight_kg: weightKg,
         results_barge: raw.filter(s => s.mode === 'barge').length,
@@ -259,7 +262,9 @@ function ResultsInner() {
           {slots === null ? (
             <span>Loading live slots…</span>
           ) : slots.length === 0 ? (
-            <span className={styles.noSlots}>No slots found for this date. Try another date.</span>
+            <span style={{color:'var(--amber)',fontWeight:600}}>
+              ⚠ No slots found for this route and date. Your search has been recorded — operators will see this demand.
+            </span>
           ) : (
             <span><strong style={{color:'#2E7D32'}}>● </strong>{slots.length} live slot{slots.length !== 1 ? 's' : ''} available · sorted by {SORT_TABS.find(t => t.key === sortMode)?.label.toLowerCase()}</span>
           )}
@@ -296,6 +301,24 @@ function ResultsInner() {
         </div>
 
         {/* Mode cards — ordered by current sort winner */}
+        {slots && slots.length === 0 ? (
+          <div style={{background:'#fff',border:'1px solid var(--grey-border)',borderRadius:14,padding:40,textAlign:'center',boxShadow:'var(--shadow)'}}>
+            <div style={{width:64,height:64,background:'#FFF8E1',borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 16px'}}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F57F17" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div style={{fontSize:18,fontWeight:800,marginBottom:8}}>No capacity available</div>
+            <div style={{fontSize:14,color:'var(--grey-label)',lineHeight:1.7,maxWidth:420,margin:'0 auto 12px'}}>
+              There are currently no <strong>{origin.split(' ')[0]} → {dest.split(' ')[0]}</strong> slots for {fmtDate(date + 'T12:00:00')}.
+            </div>
+            <div style={{fontSize:13,color:'var(--grey-label)',background:'var(--grey-bg)',borderRadius:8,padding:'10px 16px',display:'inline-block',marginBottom:24}}>
+              Your search has been recorded. Operators on this route will see unmet demand and can choose to publish capacity.
+            </div>
+            <div style={{display:'flex',gap:12,justifyContent:'center'}}>
+              <button className="btn btn-primary" onClick={() => router.push('/search')}>Try different date</button>
+              <button className="btn btn-secondary" onClick={() => router.push('/search')}>Edit route</button>
+            </div>
+          </div>
+        ) : (
         <div className={styles.cards}>
           {((() => {
             if (!slots || slots.length === 0) return ['barge','rail','road'];
@@ -328,6 +351,7 @@ function ResultsInner() {
             });
           })())}
         </div>
+        )}
       </div>
     </>
   );

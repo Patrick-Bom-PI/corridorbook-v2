@@ -45,11 +45,10 @@ export default function OperatorPage() {
     setSlots(s);
     setBookings(b);
     // Load demand signals
-    const { data } = await supabase.from('searches')
-      .select('origin, destination, requested_date, results_barge, results_rail, results_road')
-      .or('results_barge.eq.0,results_rail.eq.0')
-      .order('created_at', { ascending: false })
-      .limit(20);
+    const { data } = await supabase.from('demand_signals')
+      .select('origin, destination, search_date, unmet_barge, unmet_rail, unmet_road, met_barge, met_rail, met_road, total_searches')
+      .order('search_date', { ascending: false })
+      .limit(30);
     setDemands(data || []);
     setLoading(false);
   }
@@ -225,19 +224,23 @@ export default function OperatorPage() {
           )
         ) : (
           demands.length === 0 ? (
-            <div className="empty-state"><div className="empty-icon">📡</div><div className="empty-title">No demand signals yet</div><div className="empty-sub">Zero-result forwarder searches will appear here.</div></div>
+            <div className="empty-state"><div className="empty-icon">📡</div><div className="empty-title">No demand signals yet</div><div className="empty-sub">Demand signals are generated when forwarders search routes. They update automatically as searches come in.</div></div>
           ) : (
             <div className={styles.slotList}>
               {demands.map((d, i) => (
                 <div key={i} className={styles.slotCard}>
                   <div className={styles.slotHead}>
                     <span style={{fontSize:13,fontWeight:600}}>{d.origin} → {d.destination}</span>
-                    <span style={{marginLeft:'auto',fontSize:12,color:'var(--grey-label)'}}>{d.requested_date}</span>
+                    <span style={{marginLeft:'auto',fontSize:12,color:'var(--grey-label)'}}>{d.search_date}</span>
                   </div>
                   <div className={styles.slotBody}>
-                    <span style={{color:'var(--amber)',fontWeight:600}}>
-                      Barge: {d.results_barge} · Rail: {d.results_rail} · Road: {d.results_road} slots found
-                    </span>
+                    <div style={{display:'flex',gap:16,fontSize:12}}>
+                      <span>🔍 {d.total_searches} search{d.total_searches !== 1 ? 'es' : ''}</span>
+                      {d.unmet_barge > 0 && <span style={{color:'var(--amber)',fontWeight:600}}>Barge: {d.unmet_barge} unmet</span>}
+                      {d.unmet_rail > 0  && <span style={{color:'var(--amber)',fontWeight:600}}>Rail: {d.unmet_rail} unmet</span>}
+                      {d.unmet_road > 0  && <span style={{color:'var(--amber)',fontWeight:600}}>Road: {d.unmet_road} unmet</span>}
+                      {(d.met_barge > 0 || d.met_rail > 0 || d.met_road > 0) && <span style={{color:'var(--green)',fontWeight:600}}>✓ {(d.met_barge||0)+(d.met_rail||0)+(d.met_road||0)} met</span>}
+                    </div>
                   </div>
                 </div>
               ))}

@@ -6,14 +6,63 @@ import { useAuthGuard } from '@/components/useAuthGuard';
 import { getStats } from '@/lib/api';
 import styles from './search.module.css';
 
-const ORIGINS = ['Rotterdam Maasvlakte','Rotterdam Waalhaven','Rotterdam Botlek','Rotterdam ECT Delta'];
-const DESTS   = ['Antwerp Deurganck','Antwerp Noord','Antwerp Liefkenshoek','Antwerp Berendrecht'];
-const CTYPES  = [
+const CTYPES = [
   { value:'20GP', label:"20' General Purpose", kg:22000 },
   { value:'40GP', label:"40' General Purpose", kg:27000 },
   { value:'40HC', label:"40' High Cube",       kg:28800 },
   { value:'45HC', label:"45' High Cube",       kg:29500 },
 ];
+
+// Suggestions for autocomplete
+const PORT_SUGGESTIONS = [
+  'Rotterdam Maasvlakte', 'Rotterdam Waalhaven', 'Rotterdam Botlek', 'Rotterdam ECT Delta',
+  'Antwerp Deurganck', 'Antwerp Noord', 'Antwerp Liefkenshoek', 'Antwerp Berendrecht',
+  'Amsterdam Westpoort', 'Moerdijk Terminal', 'Breda Logistics Park',
+  'Ghent Sea Terminal', 'Brussels Barge Terminal', 'Liege Trilogiport',
+  'Duisburg Logport', 'Hamburg Container Terminal', 'Felixstowe Port',
+];
+
+function PortInput({ value, onChange, placeholder, id }) {
+  const [focused, setFocused] = useState(false);
+  const suggestions = PORT_SUGGESTIONS.filter(s =>
+    value.length > 1 && s.toLowerCase().includes(value.toLowerCase()) && s !== value
+  ).slice(0, 5);
+
+  return (
+    <div style={{position:'relative'}}>
+      <input
+        id={id}
+        className="input"
+        type="text"
+        placeholder={placeholder}
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setTimeout(() => setFocused(false), 150)}
+        autoComplete="off"
+      />
+      {focused && suggestions.length > 0 && (
+        <div style={{
+          position:'absolute', top:'100%', left:0, right:0, zIndex:100,
+          background:'#fff', border:'1px solid var(--grey-border)',
+          borderRadius:'0 0 8px 8px', boxShadow:'var(--shadow-lg)',
+          maxHeight:200, overflowY:'auto',
+        }}>
+          {suggestions.map(s => (
+            <div key={s}
+              style={{padding:'10px 14px',fontSize:13,cursor:'pointer',borderBottom:'1px solid var(--grey-bg)'}}
+              onMouseDown={() => { onChange(s); setFocused(false); }}
+              onMouseEnter={e => e.target.style.background='var(--grey-bg)'}
+              onMouseLeave={e => e.target.style.background='#fff'}
+            >
+              {s}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function SearchPage() {
   const { loading } = useAuthGuard({ forwarderOnly: true });
@@ -28,8 +77,8 @@ export default function SearchPage() {
   tomorrow.setDate(tomorrow.getDate() + 1);
   const defaultDate = tomorrow.toISOString().split('T')[0];
 
-  const [origin,  setOrigin]  = useState('Rotterdam Maasvlakte');
-  const [dest,    setDest]    = useState('Antwerp Deurganck');
+  const [origin,  setOrigin]  = useState('');
+  const [dest,    setDest]    = useState('');
   const [date,    setDate]    = useState(defaultDate);
   const [ctype,   setCtype]   = useState('40HC');
   const [qty,     setQty]     = useState(1);
@@ -51,18 +100,32 @@ export default function SearchPage() {
 
   function handleSwap() {
     const tmp = origin;
-    setOrigin(dest.replace('Antwerp', 'Rotterdam').replace('Deurganck','Maasvlakte').replace('Noord','Waalhaven').replace('Liefkenshoek','Botlek').replace('Berendrecht','ECT Delta'));
-    setDest('Antwerp Deurganck');
+    setOrigin(dest);
+    setDest(tmp);
   }
 
   function handleSearch(e) {
     e.preventDefault();
-    if (!origin || !dest || !date) { setError('Please fill in all fields.'); return; }
-    const params = new URLSearchParams({ origin, dest, date, weight: String(weight), ctype, qty: String(qty) });
+    if (!origin.trim() || !dest.trim() || !date) {
+      setError('Please fill in origin, destination and date.');
+      return;
+    }
+    if (origin.trim().toLowerCase() === dest.trim().toLowerCase()) {
+      setError('Origin and destination cannot be the same.');
+      return;
+    }
+    const params = new URLSearchParams({
+      origin: origin.trim(), dest: dest.trim(), date,
+      weight: String(weight), ctype, qty: String(qty),
+    });
     router.push('/results?' + params.toString());
   }
 
-  if (loading) return <div className={styles.loading}><div className="spinner" style={{borderTopColor:'#4DA3FF',borderColor:'rgba(77,163,255,0.2)',width:32,height:32,borderWidth:3}}></div></div>;
+  if (loading) return (
+    <div className={styles.loading}>
+      <div className="spinner" style={{borderTopColor:'#4DA3FF',borderColor:'rgba(77,163,255,0.2)',width:32,height:32,borderWidth:3}}></div>
+    </div>
+  );
 
   return (
     <>
@@ -77,7 +140,7 @@ export default function SearchPage() {
               <span className={styles.heroPillText}>Live Corridor Capacity</span>
             </div>
             <div className={styles.heroH1}>Every mode.<br/><span>Booked in</span><br/>seconds.</div>
-            <p className={styles.heroDesc}>Compare barge, rail and road capacity on the Rotterdam–Antwerp corridor in real time. No quotes, no calls.</p>
+            <p className={styles.heroDesc}>Search barge, rail and road capacity across Europe in real time. Type any port, terminal or logistics hub — no quotes, no calls.</p>
             <div className={styles.heroStats}>
               <div className={styles.statItem}><div className={styles.statDot}></div><div className={styles.statText}><strong>{stats.activeSlots}+</strong> live slots</div></div>
               <div className={styles.statItem}><div className={styles.statDot}></div><div className={styles.statText}><strong>{stats.totalBookings}</strong> bookings confirmed</div></div>
@@ -90,22 +153,28 @@ export default function SearchPage() {
             <div className={styles.card}>
               <div className={styles.cardBody}>
                 <form onSubmit={handleSearch}>
-                  {/* From / Swap / To */}
+                  {/* From / Swap / To — free text with autocomplete */}
                   <div className={styles.fieldRow}>
                     <div className={styles.fieldBox}>
                       <div className={styles.fieldLabel}>From</div>
-                      <select className="select" value={origin} onChange={e => setOrigin(e.target.value)}>
-                        {ORIGINS.map(o => <option key={o} value={o}>{o}</option>)}
-                      </select>
+                      <PortInput
+                        id="originInput"
+                        value={origin}
+                        onChange={setOrigin}
+                        placeholder="Any port or terminal…"
+                      />
                     </div>
                     <button type="button" className={styles.swapBtn} onClick={handleSwap}>
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M16 3l4 4-4 4"/><path d="M20 7H4"/><path d="M8 21l-4-4 4-4"/><path d="M4 17h16"/></svg>
                     </button>
                     <div className={styles.fieldBox}>
                       <div className={styles.fieldLabel}>To</div>
-                      <select className="select" value={dest} onChange={e => setDest(e.target.value)}>
-                        {DESTS.map(d => <option key={d} value={d}>{d}</option>)}
-                      </select>
+                      <PortInput
+                        id="destInput"
+                        value={dest}
+                        onChange={setDest}
+                        placeholder="Any port or terminal…"
+                      />
                     </div>
                   </div>
 
@@ -128,15 +197,16 @@ export default function SearchPage() {
 
                   <div className={styles.weightRow}>
                     <span className={styles.weightLabel}>Total cargo weight</span>
-                    <input
-                      type="number"
-                      value={weight}
-                      onChange={e => setWeight(parseInt(e.target.value) || 0)}
-                      style={{border:'none',background:'transparent',fontFamily:'var(--font-mono)',fontSize:13,fontWeight:700,textAlign:'right',width:120,outline:'none',color:'var(--text)'}}
-                      min="1000"
-                      max="1000000"
-                    />
-                    <span style={{fontSize:13,color:'var(--grey-label)',marginLeft:4}}>kg</span>
+                    <div style={{display:'flex',alignItems:'center',gap:4}}>
+                      <input
+                        type="number"
+                        value={weight}
+                        onChange={e => setWeight(parseInt(e.target.value) || 0)}
+                        style={{border:'none',background:'transparent',fontFamily:'var(--font-mono)',fontSize:13,fontWeight:700,textAlign:'right',width:100,outline:'none',color:'var(--text)'}}
+                        min="1000" max="1000000"
+                      />
+                      <span style={{fontSize:13,color:'var(--grey-label)'}}>kg</span>
+                    </div>
                   </div>
 
                   {error && <div className="alert alert-error" style={{marginBottom:12}}>{error}</div>}
