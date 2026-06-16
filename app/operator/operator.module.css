@@ -1,0 +1,28 @@
+.slotList { display: flex; flex-direction: column; gap: 10px; }
+
+.slotCard {
+  background: var(--white);
+  border: 1px solid var(--grey-border);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.slotHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.slotMode {
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.slotBody {
+  display: flex;
+  gap: 20px;
+  font-size: 13px;
+  color: var(--grey-label);
+}

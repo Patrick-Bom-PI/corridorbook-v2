@@ -1,0 +1,212 @@
+.loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0B1828;
+}
+
+/* Full page dark background with photo — matches original */
+.page {
+  min-height: calc(100vh - 56px);
+  background: #0B1828;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1605745341112-85968b19335b?w=1400&q=85');
+  background-size: cover;
+  background-position: center 55%;
+  z-index: 0;
+}
+
+.page::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(7,15,28,0.92) 0%, rgba(7,15,28,0.75) 60%, rgba(7,15,28,0.55) 100%);
+  z-index: 1;
+}
+
+.inner {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 48px;
+  max-width: 1000px;
+  width: 100%;
+  align-items: center;
+}
+
+/* Hero text */
+.heroPill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+
+.heroPillDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22C55E;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.heroPillText {
+  font-size: 12px;
+  color: rgba(255,255,255,0.55);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+
+.heroH1 {
+  font-size: 40px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  margin-bottom: 14px;
+}
+
+.heroH1 span { color: #4DA3FF; }
+
+.heroDesc {
+  font-size: 14px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.65;
+  margin-bottom: 28px;
+  max-width: 380px;
+}
+
+.heroStats { display: flex; flex-direction: column; gap: 8px; }
+
+.statItem { display: flex; align-items: center; gap: 8px; }
+
+.statDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #4DA3FF;
+  flex-shrink: 0;
+}
+
+.statText { font-size: 13px; color: rgba(255,255,255,0.5); }
+.statText strong { color: rgba(255,255,255,0.85); }
+
+/* Search card */
+.card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.5), 0 4px 16px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+
+.cardBody { padding: 20px; }
+
+/* Field row (From / To) */
+.fieldRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.fieldBox { flex: 1; }
+
+.fieldLabel {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--grey-label);
+  margin-bottom: 5px;
+}
+
+.swapBtn {
+  width: 32px;
+  height: 44px;
+  border: 1.5px solid var(--grey-border);
+  border-radius: 8px;
+  background: var(--grey-bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--grey-label);
+  transition: all 0.15s;
+}
+
+.swapBtn:hover { background: var(--blue-light); border-color: var(--blue); color: var(--blue); }
+
+/* Grid rows */
+.grid3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+/* Weight display */
+.weightRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--grey-bg);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+
+.weightLabel { font-size: 12px; color: var(--grey-label); }
+.weightValue { font-size: 13px; font-weight: 700; font-family: var(--font-mono); }
+
+/* Search button */
+.searchBtn {
+  width: 100%;
+  height: 48px;
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.searchBtn:hover { background: #0D47A1; }
+
+@media (max-width: 768px) {
+  .inner { grid-template-columns: 1fr; }
+  .heroH1 { font-size: 28px; }
+  .grid3 { grid-template-columns: 1fr; }
+}

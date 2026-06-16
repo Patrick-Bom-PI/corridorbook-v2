@@ -1,0 +1,70 @@
+.list { display: flex; flex-direction: column; gap: 12px; }
+
+.bookingCard {
+  background: var(--white);
+  border: 1px solid var(--grey-border);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.bookingHead {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.bookingMode {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+}
+
+.modeName { font-weight: 700; font-size: 15px; }
+
+.bookingRef {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+  background: var(--blue-light);
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  margin-left: auto;
+}
+
+.bookingBody { margin-bottom: 14px; }
+
+.bookingRoute {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.arrow { color: var(--grey-muted); }
+
+.bookingMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--grey-label);
+}
+
+.bookingFoot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--grey-bg);
+}
+
+.bookingPrice {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+}

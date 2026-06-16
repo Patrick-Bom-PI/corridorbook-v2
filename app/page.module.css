@@ -1,0 +1,369 @@
+/* Landing page — matches original index.html exactly */
+.root {
+  display: grid;
+  grid-template-columns: 1fr 440px;
+  min-height: 100vh;
+}
+
+/* ── Left panel ── */
+.left {
+  background: #0B1828;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.leftBg {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1605745341112-85968b19335b?w=1400&q=85');
+  background-size: cover;
+  background-position: center 55%;
+  z-index: 0;
+}
+
+.leftOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(7,15,28,0.95) 0%, rgba(7,15,28,0.82) 55%, rgba(7,15,28,0.65) 100%);
+  z-index: 1;
+}
+
+.left > * { position: relative; z-index: 2; }
+
+.brand {
+  font-size: 19px;
+  font-weight: 800;
+  color: #F0F7FF;
+  letter-spacing: -0.4px;
+  text-decoration: none;
+  margin-bottom: 28px;
+  display: block;
+}
+.brand span { color: #4DA3FF; }
+
+/* Role toggle */
+.roleToggle {
+  display: flex;
+  background: rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 3px;
+  width: fit-content;
+  margin-bottom: 32px;
+  gap: 0;
+}
+
+.roleBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  transition: all 0.2s;
+}
+
+.roleBtnActive { background: #fff; color: #0B1828; }
+.roleBtnInactive { background: transparent; color: rgba(255,255,255,0.5); }
+
+/* Live pill */
+.livePill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.liveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22C55E;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
+  50% { opacity: 0.85; box-shadow: 0 0 0 5px rgba(34,197,94,0); }
+}
+
+.liveLabel { font-size: 12px; color: rgba(255,255,255,0.55); font-weight: 500; }
+
+.heroH1 {
+  font-size: 38px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -1.5px;
+  line-height: 1.1;
+  margin-bottom: 14px;
+}
+.heroH1 span { color: #4DA3FF; }
+
+.heroDesc {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.65;
+  margin-bottom: 28px;
+  max-width: 420px;
+}
+
+/* Mode rows */
+.modeRows { display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+
+.modeRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+
+.modeRowMuted { opacity: 0.45; }
+
+.modeIconBox {
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.modeInfo { flex: 1; }
+
+.modeNameText {
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.modeBarTrack {
+  height: 3px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.modeBarFill { height: 100%; border-radius: 2px; }
+
+.modePrice { font-size: 13px; font-weight: 700; color: #fff; text-align: right; }
+.modeCo2   { font-size: 11px; color: #4CAF50; text-align: right; }
+
+/* Trust row */
+.trustRow {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.trustItem { display: flex; flex-direction: column; gap: 2px; }
+.trustNum  { font-size: 15px; font-weight: 800; color: #fff; font-family: var(--font-mono); }
+.trustLabel { font-size: 11px; color: rgba(255,255,255,0.4); }
+.trustDiv  { width: 1px; height: 28px; background: rgba(255,255,255,0.15); }
+
+/* ── Right panel ── */
+.right {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 32px;
+  border-left: 1px solid rgba(255,255,255,0.06);
+}
+
+.authBox { width: 100%; max-width: 340px; }
+
+.authBrand {
+  font-size: 18px;
+  font-weight: 800;
+  color: #1A1A1A;
+  letter-spacing: -0.4px;
+  margin-bottom: 24px;
+}
+.authBrand span { color: #1565C0; }
+
+.authTabs {
+  display: flex;
+  border-bottom: 2px solid #F0F0F0;
+  margin-bottom: 24px;
+}
+
+.authTab {
+  padding: 10px 0;
+  margin-right: 24px;
+  font-size: 14px;
+  font-weight: 700;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  color: #9E9E9E;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--font-ui);
+}
+
+.authTabActive { color: #1565C0; border-bottom-color: #1565C0; }
+
+.form { display: flex; flex-direction: column; }
+
+.switchText {
+  text-align: center;
+  font-size: 12px;
+  color: #9E9E9E;
+  margin-top: 16px;
+}
+
+.switchLink {
+  background: none;
+  border: none;
+  color: #1565C0;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0;
+  font-family: var(--font-ui);
+}
+
+.loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0B1828;
+}
+
+@media (max-width: 768px) {
+  .root { grid-template-columns: 1fr; }
+  .left { padding: 28px 20px; min-height: 60vh; }
+  .heroH1 { font-size: 28px; }
+  .right { padding: 32px 20px; }
+}
+
+/* ── Operator panel ── */
+.apiBlock {
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+
+.apiLabel {
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.apiCode {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.9;
+  color: #4DA3FF;
+}
+
+.opStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.opStat {
+  background: rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+
+.opStatNum {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+
+.opStatLabel {
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 2px;
+}
+
+/* ── Left footer ── */
+.leftFooter {
+  margin-top: auto;
+  padding-top: 24px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+}
+
+/* ── Auth box improvements ── */
+.authTitle {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.authSub {
+  font-size: 13px;
+  color: #6C757D;
+  margin-bottom: 24px;
+}
+
+/* ── Role cards in register form ── */
+.roleLabel {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6C757D;
+  margin-bottom: 8px;
+}
+
+.roleGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.roleCard {
+  border: 1.5px solid #D0D0D0;
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.15s;
+  background: #fff;
+}
+
+.roleCard:hover { border-color: #1565C0; }
+
+.roleCardSelected {
+  border-color: #1565C0;
+  background: #E3F2FD;
+}
+
+.roleCardName {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1A1A1A;
+  text-align: center;
+}
