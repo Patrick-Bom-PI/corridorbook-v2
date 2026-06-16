@@ -5,7 +5,7 @@ import { ToastProvider } from '@/components/Toast';
 export const metadata = {
   title: 'CorridorBook',
   description: 'Multimodal freight booking — Rotterdam to Antwerp',
-  icons: { icon: '/favicon.svg', shortcut: '/favicon.svg' },
+
 };
 
 export default function RootLayout({ children }) {
