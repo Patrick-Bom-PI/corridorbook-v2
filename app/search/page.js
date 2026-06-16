@@ -184,9 +184,9 @@ export default function SearchPage() {
                       <input className="input" type="date" value={date} min={defaultDate} onChange={e => setDate(e.target.value)} required />
                     </div>
                     <div>
-                      <div className={styles.fieldLabel}>Container</div>
-                      <select className="select" value={ctype} onChange={e => handleCtype(e.target.value)}>
-                        {CTYPES.map(ct => <option key={ct.value} value={ct.value}>{ct.value} — {ct.label}</option>)}
+                      <div className={styles.fieldLabel}>Container type</div>
+                      <select className="select" value={ctype} onChange={e => handleCtype(e.target.value)} style={{fontSize:13}}>
+                        {CTYPES.map(ct => <option key={ct.value} value={ct.value}>{ct.value} · {ct.label}</option>)}
                       </select>
                     </div>
                     <div>
