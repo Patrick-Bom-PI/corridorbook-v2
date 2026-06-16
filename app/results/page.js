@@ -54,7 +54,13 @@ function ModeCard({ slots: modeSlots, weightKg, recommended, onSelect, selected 
 
   return (
     <div className={`${styles.card} ${selected ? styles.cardSelected : ''}`} onClick={() => onSelect(slot)}>
-      {recommended && (
+      {slot.missesDeadline && (
+        <div style={{display:'inline-flex',alignItems:'center',gap:4,fontSize:11,fontWeight:700,color:'#C62828',background:'#FFEBEE',border:'1px solid #FFCDD2',borderRadius:20,padding:'3px 10px',marginBottom:14}}>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#C62828" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          MISSES DELIVERY DATE
+        </div>
+      )}
+      {recommended && !slot.missesDeadline && (
         <div className={styles.recBadge}>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="#F57F17" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           RECOMMENDED
@@ -148,6 +154,7 @@ function ResultsInner() {
   const weightKg = parseInt(searchParams.get('weight') || '24000');
   const ctype    = searchParams.get('ctype')  || '40HC';
   const qty      = searchParams.get('qty')    || '1';
+  const arrival  = searchParams.get('arrival') || '';
 
   const [slots, setSlots]       = useState(null); // null = loading
   const [sortMode, setSortMode] = useState('default');
@@ -165,7 +172,7 @@ function ResultsInner() {
         date,
         cargo_weight_kg: weightKg,
       });
-      const scored = scoreSlots(raw, { sortMode, cargo_weight_kg: weightKg });
+      const scored = scoreSlots(raw, { sortMode, cargo_weight_kg: weightKg, requiredArrival: arrival || null });
       setSlots(scored);
 
       // Log the search with per-mode result counts
@@ -250,6 +257,7 @@ function ResultsInner() {
           <div className={styles.searchPills}>
             <span className={styles.pill}>{origin.split(' ')[0]} → {dest.split(' ')[0]}</span>
             <span className={styles.pill}>{fmtDate(date + 'T12:00:00')}</span>
+            {arrival && <span className={styles.pill}>Deliver by {fmtDate(arrival + 'T12:00:00')}</span>}
             <span className={styles.pill}>{weightKg.toLocaleString()} kg · {qty}× {ctype}</span>
           </div>
           <button className="btn btn-secondary" style={{fontSize:12,height:32,padding:'0 12px'}} onClick={() => router.push('/search')}>

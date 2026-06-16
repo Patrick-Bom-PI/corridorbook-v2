@@ -80,6 +80,7 @@ export default function SearchPage() {
   const [origin,  setOrigin]  = useState('');
   const [dest,    setDest]    = useState('');
   const [date,    setDate]    = useState(defaultDate);
+  const [arrival, setArrival] = useState('');
   const [ctype,   setCtype]   = useState('40HC');
   const [qty,     setQty]     = useState(1);
   const [weight,  setWeight]  = useState(28800);
@@ -117,6 +118,7 @@ export default function SearchPage() {
     const params = new URLSearchParams({
       origin: origin.trim(), dest: dest.trim(), date,
       weight: String(weight), ctype, qty: String(qty),
+      arrival: arrival || '',
     });
     router.push('/results?' + params.toString());
   }
@@ -178,10 +180,14 @@ export default function SearchPage() {
                     </div>
                   </div>
 
-                  <div style={{display:"grid",gridTemplateColumns:"1fr 2fr 80px",gap:10,marginBottom:12}}>
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 80px",gap:10,marginBottom:12}}>
                     <div>
-                      <div className={styles.fieldLabel}>Date</div>
+                      <div className={styles.fieldLabel}>Departure date</div>
                       <input className="input" type="date" value={date} min={defaultDate} onChange={e => setDate(e.target.value)} required />
+                    </div>
+                    <div>
+                      <div className={styles.fieldLabel}>Required by</div>
+                      <input className="input" type="date" value={arrival} min={date || defaultDate} onChange={e => setArrival(e.target.value)} />
                     </div>
                     <div>
                       <div className={styles.fieldLabel}>Container</div>
