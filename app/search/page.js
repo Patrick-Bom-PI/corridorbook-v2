@@ -185,9 +185,22 @@ export default function SearchPage() {
                     </div>
                     <div>
                       <div className={styles.fieldLabel}>Container</div>
-                      <select className="select" value={ctype} onChange={e => handleCtype(e.target.value)}>
-                        {CTYPES.map(ct => <option key={ct.value} value={ct.value}>{ct.value} — {ct.label}</option>)}
-                      </select>
+                      <div style={{position:'relative'}}>
+                        <select
+                          value={ctype}
+                          onChange={e => handleCtype(e.target.value)}
+                          style={{
+                            position:'absolute',inset:0,width:'100%',height:'100%',
+                            opacity:0,cursor:'pointer',zIndex:2,fontSize:14
+                          }}
+                        >
+                          {CTYPES.map(ct => <option key={ct.value} value={ct.value}>{ct.value} — {ct.label}</option>)}
+                        </select>
+                        <div className="input" style={{display:'flex',alignItems:'center',justifyContent:'space-between',pointerEvents:'none',zIndex:1}}>
+                          <span style={{fontWeight:600,fontSize:14,color:'var(--text)'}}>{ctype}</span>
+                          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#6C757D" strokeWidth="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                      </div>
                     </div>
                     <div>
                       <div className={styles.fieldLabel}>Qty</div>
