@@ -184,10 +184,17 @@ export default function SearchPage() {
                       <input className="input" type="date" value={date} min={defaultDate} onChange={e => setDate(e.target.value)} required />
                     </div>
                     <div>
-                      <div className={styles.fieldLabel}>Container type</div>
-                      <select className="select" value={ctype} onChange={e => handleCtype(e.target.value)} style={{fontSize:13}}>
-                        {CTYPES.map(ct => <option key={ct.value} value={ct.value}>{ct.value} · {ct.label}</option>)}
-                      </select>
+                      <div className={styles.fieldLabel}>Container</div>
+                      <div style={{position:'relative'}}>
+                        <select className="select" value={ctype} onChange={e => handleCtype(e.target.value)}
+                          style={{color:'transparent',position:'absolute',inset:0,width:'100%',height:'100%',opacity:0.01,cursor:'pointer',zIndex:1}}>
+                          {CTYPES.map(ct => <option key={ct.value} value={ct.value}>{ct.value} · {ct.label}</option>)}
+                        </select>
+                        <div className="input" style={{display:'flex',alignItems:'center',justifyContent:'space-between',cursor:'pointer',userSelect:'none'}}>
+                          <span style={{fontWeight:600}}>{ctype}</span>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                      </div>
                     </div>
                     <div>
                       <div className={styles.fieldLabel}>Qty</div>
