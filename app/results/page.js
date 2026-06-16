@@ -6,6 +6,8 @@ import Nav from '@/components/Nav';
 import { useAuthGuard } from '@/components/useAuthGuard';
 import { getSlots, scoreSlots, logSearch } from '@/lib/api';
 import styles from './results.module.css';
+import dynamic from 'next/dynamic';
+const RouteMap = dynamic(() => import('@/components/RouteMap'), { ssr: false });
 
 const ROAD_CO2 = 0.096;
 const DIST_KM  = 90;
@@ -264,6 +266,21 @@ function ResultsInner() {
         </div>
 
         {error && <div className="alert alert-error">{error}</div>}
+
+        {/* Route map */}
+        <div className={styles.mapWrap}>
+          <div className={styles.mapContainer}>
+            <RouteMap
+              origin={origin}
+              dest={dest}
+              activeMode={selected?.mode || (slots && slots[0]?.mode) || 'barge'}
+            />
+          </div>
+          <div className={styles.mapInfo}>
+            <span className={styles.mapTitle}>{origin.split(' ')[0]} → {dest.split(' ')[0]}</span>
+            <span className={styles.mapSub}>{slots ? slots.length : '…'} routes · {fmtDate(date + 'T12:00:00')}</span>
+          </div>
+        </div>
 
         {/* Sort tabs */}
         <div className={styles.sortTabs}>

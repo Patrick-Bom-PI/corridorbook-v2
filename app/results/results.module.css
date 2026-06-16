@@ -294,3 +294,36 @@
 }
 
 .slotPriceActive { color: var(--blue); }
+
+/* ── Route map ───────────────────────────────────────────────── */
+.mapWrap {
+  background: var(--white);
+  border: 1px solid var(--grey-border);
+  border-radius: var(--r);
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+
+.mapContainer {
+  height: 220px;
+  width: 100%;
+}
+
+.mapInfo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-top: 1px solid var(--grey-bg);
+}
+
+.mapTitle {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mapSub {
+  font-size: 12px;
+  color: var(--grey-label);
+}

@@ -117,7 +117,7 @@ export default function SearchPage() {
                     <div>
                       <div className={styles.fieldLabel}>Container</div>
                       <select className="select" value={ctype} onChange={e => handleCtype(e.target.value)}>
-                        {CTYPES.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
+                        {CTYPES.map(ct => <option key={ct.value} value={ct.value}>{ct.value} — {ct.label}</option>)}
                       </select>
                     </div>
                     <div>
@@ -128,7 +128,15 @@ export default function SearchPage() {
 
                   <div className={styles.weightRow}>
                     <span className={styles.weightLabel}>Total cargo weight</span>
-                    <span className={styles.weightValue}>{weight.toLocaleString()} kg</span>
+                    <input
+                      type="number"
+                      value={weight}
+                      onChange={e => setWeight(parseInt(e.target.value) || 0)}
+                      style={{border:'none',background:'transparent',fontFamily:'var(--font-mono)',fontSize:13,fontWeight:700,textAlign:'right',width:120,outline:'none',color:'var(--text)'}}
+                      min="1000"
+                      max="1000000"
+                    />
+                    <span style={{fontSize:13,color:'var(--grey-label)',marginLeft:4}}>kg</span>
                   </div>
 
                   {error && <div className="alert alert-error" style={{marginBottom:12}}>{error}</div>}
