@@ -180,17 +180,19 @@ export default function SearchPage() {
                     </div>
                   </div>
 
-                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 80px",gap:10,marginBottom:12}}>
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
                     <div>
                       <div className={styles.fieldLabel}>Departure date</div>
                       <input className="input" type="date" value={date} min={defaultDate} onChange={e => setDate(e.target.value)} required />
                     </div>
                     <div>
-                      <div className={styles.fieldLabel}>Required by</div>
+                      <div className={styles.fieldLabel}>Required delivery by</div>
                       <input className="input" type="date" value={arrival} min={date || defaultDate} onChange={e => setArrival(e.target.value)} />
                     </div>
+                  </div>
+                  <div style={{display:"grid",gridTemplateColumns:"1fr 80px",gap:10,marginBottom:10}}>
                     <div>
-                      <div className={styles.fieldLabel}>Container</div>
+                      <div className={styles.fieldLabel}>Container type</div>
                       <div style={{position:'relative'}}>
                         <select
                           value={ctype}
